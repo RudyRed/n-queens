@@ -80,20 +80,27 @@ window.findNRooksSolution = function(n) {
   var recursion = function () {
     var currentColumn = 0;  
     var row = currentRow;
-    //console.log(currentRow)
-    for (var i = 0; i < n; i++) {
+    
+    // recursive board factory and board checker 
+    for (var i = i; i < n; i++) {
       possibleSolution[row] = possibleRows[i];
+      
+      // adding possible solution rows to an incomplete board
       if (currentRow < n - 1) {
         currentRow++;
         recursion();
       }
+      
+      // testing a full board for no conflicts
       if (currentRow === n - 1) {
         var testBoard = new Board(possibleSolution);
         if (!testBoard.hasAnyRooksConflicts()) {
+          // returning first possible solution
           return possibleSolution;
         }
       }
     }
+    // decrement the current row iterator to 
     currentRow--;
   };
   var solution = recursion();
@@ -103,7 +110,40 @@ window.findNRooksSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+  var possibleRows = _createPossibleRowsArray(n);
+  var possibleSolution = Array(n);
+  var currentRow = 0;
+  var solutionCount = 0;
+  // var solution = undefined; //fixme
+
+
+  var recursion = function () {
+    var currentColumn = 0;  
+    var row = currentRow;
+    
+    // recursive board factory and board checker 
+    for (var i = 0; i < n; i++) {
+      possibleSolution[row] = possibleRows[i];
+      
+      // adding possible solution rows to an incomplete board
+      if (currentRow < n - 1) {
+        currentRow++;
+        recursion();
+      }
+      
+      // testing a full board for no conflicts
+      if (currentRow === n - 1) {
+        var testBoard = new Board(possibleSolution);
+        if (!testBoard.hasAnyRooksConflicts()) {
+          // returning first possible solution
+          solutionCount++;
+        }
+      }
+    }
+    // decrement the current row iterator to 
+    currentRow--;
+  };
+  recursion();
 
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
