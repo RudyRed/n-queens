@@ -60,10 +60,43 @@ window._createPossibleRowsArray = function(n) {
   return possibleRows;
 };
 
+//  create a possible rows array with values _createPossibleRowsArrayof n length
+//  create empty possibleSolution array to hold the board when added
+//  create a current row var set to 0
+
+//  create a fn recursion to build the possible boards and test them, it takes no arguments
+//    create a currentColumn var set to 0 
+//    
+
+
+
 window.findNRooksSolution = function(n) {
   var possibleRows = _createPossibleRowsArray(n);
-  var solution = undefined; //fixme
+  var possibleSolution = Array(n);
+  var currentRow = 0;
+  // var solution = undefined; //fixme
 
+
+  var recursion = function () {
+    var currentColumn = 0;  
+    var row = currentRow;
+    //console.log(currentRow)
+    for (var i = 0; i < n; i++) {
+      possibleSolution[row] = possibleRows[i];
+      if (currentRow < n - 1) {
+        currentRow++;
+        recursion();
+      }
+      if (currentRow === n - 1) {
+        var testBoard = new Board(possibleSolution);
+        if (!testBoard.hasAnyRooksConflicts()) {
+          return possibleSolution;
+        }
+      }
+    }
+    currentRow--;
+  };
+  var solution = recursion();
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
   return solution;
 };
