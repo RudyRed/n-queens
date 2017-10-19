@@ -82,8 +82,8 @@ window.findNRooksSolution = function(n) {
     var row = currentRow;
     
     // recursive board factory and board checker 
-    for (var i = i; i < n; i++) {
-      possibleSolution[row] = possibleRows[i];
+    for (var i = 0; i < possibleRows.length; i++) {
+      possibleSolution[row] = possibleRows.shift();
       
       // adding possible solution rows to an incomplete board
       if (currentRow < n - 1) {
@@ -99,7 +99,9 @@ window.findNRooksSolution = function(n) {
           return possibleSolution;
         }
       }
+      possibleRows.push(possibleSolution[row]);
     }
+    
     // decrement the current row iterator to 
     currentRow--;
   };
@@ -122,8 +124,8 @@ window.countNRooksSolutions = function(n) {
     var row = currentRow;
     
     // recursive board factory and board checker 
-    for (var i = 0; i < n; i++) {
-      possibleSolution[row] = possibleRows[i];
+    for (var i = 0; i < possibleRows.length; i++) {
+      possibleSolution[row] = possibleRows.shift();
       
       // adding possible solution rows to an incomplete board
       if (currentRow < n - 1) {
@@ -139,6 +141,8 @@ window.countNRooksSolutions = function(n) {
           solutionCount++;
         }
       }
+      possibleRows.push(possibleSolution[row]);
+
     }
     // decrement the current row iterator to 
     currentRow--;
@@ -151,15 +155,112 @@ window.countNRooksSolutions = function(n) {
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
-  var solution = undefined; //fixme
+  var solution = null;
+  
+  // handle edge cases
+  if ( n === 0 ) {
+    solution = [];
+  }
+  if (n === 2 ) {
+    solution = [[0, 0], [0, 0]];
+  }
+  if (n === 3 ) {
+    solution = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+  }
+  if ( n === 1) {
+    solution = [[1]];
+  }
 
+  var possibleRows = _createPossibleRowsArray(n);
+  var possibleSolution = Array(n);
+  var currentRow = 0;
+  // var solution = undefined; //fixme
+
+
+  var recursion = function () {
+    var currentColumn = 0;  
+    var row = currentRow;
+    
+    // recursive board factory and board checker 
+    for (var i = 0; i < possibleRows.length; i++) {
+      possibleSolution[row] = possibleRows.shift();
+      
+      // adding possible solution rows to an incomplete board
+      if (currentRow < n - 1) {
+        currentRow++;
+        recursion();
+      }
+      
+      // testing a full board for no conflicts
+      if (currentRow === n - 1) {
+        var testBoard = new Board(possibleSolution);
+        if (!testBoard.hasAnyQueensConflicts()) {
+          // returning first possible solution
+          return possibleSolution;
+        }
+      }
+      possibleRows.push(possibleSolution[row]);
+    }
+    
+    // decrement the current row iterator to 
+    currentRow--;
+  };
+  if (n > 3) {
+    solution = recursion();
+  }
+  
   console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
+  
   return solution;
 };
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+
+  var possibleRows = _createPossibleRowsArray(n);
+  var possibleSolution = Array(n);
+  var currentRow = 0;
+  var solutionCount = 0;
+  // handle edge cases
+  if ( n === 2 || n === 3 ) {
+    solutionCount = 0;
+  }
+  if ( n === 0 || n === 1) {
+    solutionCount = 1;
+  }
+
+  var recursion = function () {
+    var currentColumn = 0;  
+    var row = currentRow;
+    
+    // recursive board factory and board checker 
+    for (var i = 0; i < possibleRows.length; i++) {
+      possibleSolution[row] = possibleRows.shift();
+      
+      // adding possible solution rows to an incomplete board
+      if (currentRow < n - 1) {
+        currentRow++;
+        recursion();
+      }
+      
+      // testing a full board for no conflicts
+      if (currentRow === n - 1) {
+        var testBoard = new Board(possibleSolution);
+        if (!testBoard.hasAnyQueensConflicts()) {
+          // returning first possible solution
+          solutionCount++;
+        }
+      }
+      possibleRows.push(possibleSolution[row]);
+
+    }
+    // decrement the current row iterator to 
+    currentRow--;
+  };
+  
+  if ( n > 3 ) {
+    recursion();
+  }
 
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;
