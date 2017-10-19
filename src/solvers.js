@@ -13,9 +13,55 @@
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n rooks placed such that none of them can attack each other
 
+//  Specification
+//  i- a number (representing rooks, rows and columns)
+//  o- a matrix (an array of nested arrays representing rows on the board, within the rows are  ones and zeroes representing where the rooks are located for the solution). Note: it will return the FIRST solution the function finds
 
+// Justifiction
+// this function will display a board of nxn with n rooks placed in locations such that none of them can attack each other
+
+//  Explanation:
+//  Search through all possible placements of rooks on the board, from the perspective of a single rook location in relationship to the remainder of n rooks
+
+// Pseudocode
+
+// var testMatrix = [
+//       [1, 1, 1, 1],
+//       [0, 0, 0, 0],
+//       [0, 0, 0, 0],
+//       [0, 0, 0, 0]
+//     ]
+    
+//     var testMatrix = Array(n)
+ 
+
+// testBoard[r][c] === 1
+
+// // create a new board
+// new Board(testMatrix).anyConflicts
+
+// creates an array that contains all posisble positions of a rook within a row
+window._createPossibleRowsArray = function(n) {
+  // create a possibleRows array of length n
+  // fill possibleRows array with n empty arrays of length n
+  // itterate over possibleRows and fill the arrays with 0s at each index
+  // for each row replace a 0 with a 1, at an incremented index (diagonal line)
+  var possibleRows = Array(n);
+  
+  for ( var i = 0; i < possibleRows.length; i++) {
+    possibleRows[i] = Array(n); 
+  }
+  for ( var row = 0; row < n; row++ ) {
+    possibleRows[row].fill(0);
+  }   
+  for ( var i = 0; i < n; i++ ) {
+    possibleRows[i][i] = 1;
+  }
+  return possibleRows;
+};
 
 window.findNRooksSolution = function(n) {
+  var possibleRows = _createPossibleRowsArray(n);
   var solution = undefined; //fixme
 
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
