@@ -178,9 +178,8 @@
       // create a size variable for board length
       //  create flag var
       //  iterate over the column indexes
-      //    if flag is still false
-      //      if one off hasMajorDiagonalConflictAt column index is true 
-      //        return true
+      //     if one off hasMajorDiagonalConflictAt column index is true 
+      //       return true
       // else return false
       var context = this;
       var board = context.rows();
@@ -192,7 +191,7 @@
           }
         }
       }
-      return false; // fixme
+      return false; 
     },
 
 
@@ -201,13 +200,48 @@
     // --------------------------------------------------------------
     //
     // test if a specific minor diagonal on this board contains a conflict
-    hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+    hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow, startingRow = 0) {
+      // create the board
+      // create a size variable of board length
+      // create variable column with inputed minorDiagonalColumnIndexAtFirstRow
+      // create count variable set to 0
+      //    iterate over the rows
+      //        if value at row[column] = 1 increment count
+      //      decremtent column
+      // if count >= 2 return true else false
+      var board = this.rows();
+      var size = board.length;
+      var c = minorDiagonalColumnIndexAtFirstRow;
+      var count = 0;
+      for ( var r = startingRow; r < size; r++) {
+        if ( board[r][c] === 1 ) {
+          count++;
+        } 
+        c--;
+      }
+      return count >= 2;
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+      // create the board
+      // create a size variable for board length
+      //  create flag var
+      //  iterate over the column indexes
+      //    if one off hasMinorDiagonalConflictAt column index is true 
+      //      return true
+      // else return false
+      var context = this;
+      var board = context.rows();
+      var size = board.length;
+      for ( var r = 0; r < size; r++) {
+        for ( var c = 0; c < size; c++ ) {
+          if ( context.hasMinorDiagonalConflictAt(c, r) ) {
+            return true;
+          }
+        }
+      }
+      return false;    
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
