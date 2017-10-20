@@ -93,11 +93,8 @@ window.findNRooksSolution = function(n) {
       
       // testing a full board for no conflicts
       if (currentRow === n - 1) {
-        var testBoard = new Board(possibleSolution);
-        if (!testBoard.hasAnyRooksConflicts()) {
-          // returning first possible solution
-          return possibleSolution;
-        }
+         // returning first possible solution
+         return possibleSolution;
       }
       possibleRows.push(possibleSolution[row]);
     }
